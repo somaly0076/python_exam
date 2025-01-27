@@ -1,1 +1,1 @@
-myenv/  # ignore folder myenv
+myenv*/  # ignore folder myenv
