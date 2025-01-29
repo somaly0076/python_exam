@@ -35,7 +35,19 @@ def get_product(request,*args,**kwargs):
     prods_serializer = ProductSerializer(products,many = True)
     return Response(prods_serializer.data)
 
+@api_view(['PUT'])
+def update_product(request,pk):
+    product = ProductTB.objects.get(id=pk)
+    prod_serializer = ProductSerializer(product, data=request.data)
+    if prod_serializer.is_valid():
+        prod_serializer.save()
+    return Response(prod_serializer.data)
 
+@api_view(['DELETE'])
+def delete_product(request,pk):
+    product = ProductTB.objects.get(id=pk)
+    product.delete()
+    return Response('Product is deleted successfully!')
 
 @api_view(['GET'])
 def get_category(request):
@@ -60,3 +72,19 @@ def create_category(request):
         serializer.save()
         return Response(serializer.data,status = status.HTTP_201_CREATED)
     return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def update_category(request,pk):
+    category = CategoryTB.objects.get(id=pk)
+    categ_serializer = CategorySerializer(category, data=request.data)
+    if categ_serializer.is_valid():
+        categ_serializer.save()
+    return Response(categ_serializer.data)
+
+@api_view(['DELETE'])
+def delete_category(request,pk):
+        category = CategoryTB.objects.get(id=pk)
+        category.delete()
+
+        return Response('Category is deleted successfully!')
+
