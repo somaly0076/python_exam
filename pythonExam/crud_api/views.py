@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from PIL import Image
+import os
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,7 +10,12 @@ from .serializer import ProductSerializer, CategorySerializer
 
 @api_view(['POST'])
 def create_product(request):
-    serializer = ProductSerializer(data = request.data)
+    # parser_classes = [MultiPartParser, FormParser]
+
+    # Merge request.data and request.FILES for handling both form data and file uploads
+    data = request.data.copy()
+    data.update(request.FILES)
+    serializer = ProductSerializer(data = data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data,status = status.HTTP_201_CREATED)
@@ -88,3 +95,25 @@ def delete_category(request,pk):
 
         return Response('Category is deleted successfully!')
 
+
+def search_for_image(request):
+    image_list = [],
+    img_to_search ='',
+    img= '',
+    uploaded_path= '',
+    if request.method == "POST":
+        img_to_search = request.FILES.get('img_to_search')
+        img = Image.open(img_to_search)
+        # print("image upload",img)
+        file_name = img_to_search.name  # Use 'name' to get the actual file name
+        uploaded_path = os.path.join("crud_api/static/uploaded_img", file_name)
+        os.makedirs(os.path.dirname(uploaded_path), exist_ok=True)
+        img.save(uploaded_path)
+        uploaded_path = uploaded_path.replace('crud_api/static/','')
+       
+ 
+
+    return render(request,'image_search_engine.html',{
+        "img_to_search": uploaded_path,
+        "image_list": image_list
+    })

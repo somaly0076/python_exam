@@ -5,7 +5,7 @@ from .models import ProductTB, CategoryTB
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductTB
-        fields = '__all__'
+        fields = ['name','image','price','Cat_id']
 
 class CategorySerializer(serializers.ModelSerializer):
     products = ProductSerializer(many= True)
