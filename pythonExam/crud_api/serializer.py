@@ -8,7 +8,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['name','image','price','Cat_id']
 
 class CategorySerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many= True)
+    products = ProductSerializer(many= True,read_only=True)
     class Meta:
         model = CategoryTB
         fields = '__all__'
